@@ -56,18 +56,20 @@ class mbClientClass:
                     executeVar = int(input("Execute? [1 or 0]: "))
                     if (executeVar == 1):
                         self.client.write_coil(0x05,1,unit=_UNIT_)
-                        #time.slep(0.1)
+                        time.sleep(1)
                         while True:
-                            inRun = self.client.read_input_registers(0x42,count=1,unit=_UNIT_)
-                            r = inRun.registers
-                            if (r[0] == 0):
-                                break
+                            #inRun = self.client.read_input_registers(0x42,count=1,unit=_UNIT_)
+                            #r = inRun.registers
+                            #if (r[0] == 0):
+                            #    break
                             speed_fb = self.client.read_input_registers(0x514,count=2,unit=_UNIT_) #514,515 actual speed -> actual speed 
                             x_fb = self.client.read_input_registers(0x500,count=2,unit=_UNIT_)
                             y_fb = self.client.read_input_registers(0x502,count=2,unit=_UNIT_)
                             print("X: "+str(x_fb)+" "+"Y: "+str(y_fb)+" "+"Speed: "+str(speed_fb))
                             time.sleep(0.5)
-                            eefState = int(input("Set_on estop: "))
+                            eefState = int(input("Set (estop == 1) (enter next Command == -1) (read again == 0): "))
+                            if (eefState == -1):
+                                break
                             if(eefState == 1):
                                 #0x02 estop 09 eef
                                 self.client.write_coil(0x03,1,unit=_UNIT_)
